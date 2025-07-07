@@ -14,6 +14,7 @@ final class AddReviewTest extends FunctionalTestCase
 {
     /**
      * @dataProvider provideInvalidReviewData
+     * @param array<string, int|string> $formData
      */
     public function testInvalidReviewSubmissions(array $formData): void
     {
@@ -50,17 +51,18 @@ final class AddReviewTest extends FunctionalTestCase
         self::assertNull($review);
     }
 
+    /**
+     * @return iterable<string, array<string, int|string>>
+     */
     public static function provideInvalidReviewData(): iterable
     {
         yield 'missing rating' => [
-            [ 'review[comment]' => 'Commentaire sans note.' ]
+            'review[comment]' => 'Commentaire sans note.',
         ];
 
         yield 'too long comment' => [
-            [
-                'review[rating]' => 3,
-                'review[comment]' => str_repeat('A', 3001),
-            ]
+            'review[rating]' => 3,
+            'review[comment]' => str_repeat('A', 3001),
         ];
     }
 

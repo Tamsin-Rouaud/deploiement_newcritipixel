@@ -28,6 +28,7 @@ final class FilterTest extends FunctionalTestCase
     }
 
     /**
+     * @param array<string> $tagIds
      * @dataProvider provideTagFilters
      */
     public function testShouldFilterVideoGamesByTags(array $tagIds, int $expectedMinCount): void
@@ -43,16 +44,24 @@ final class FilterTest extends FunctionalTestCase
             self::assertGreaterThanOrEqual(
                 $expectedMinCount,
                 $count,
-                sprintf('On attend au moins %d jeux pour les tags %s, mais %d trouvés.', $expectedMinCount, implode(',', $tagIds), $count)
+                sprintf(
+                    'On attend au moins %d jeux pour les tags %s, mais %d trouvés.',
+                    $expectedMinCount,
+                    implode(',', $tagIds),
+                    $count
+                )
             );
         }
     }
 
+    /**
+     * @return iterable<string, array{0: array<string>, 1: int}>
+     */
     public static function provideTagFilters(): iterable
     {
         yield 'aucun tag' => [
             [],
-            10, // pagination standard
+            10,
         ];
 
         yield 'tag RPG (id 1)' => [

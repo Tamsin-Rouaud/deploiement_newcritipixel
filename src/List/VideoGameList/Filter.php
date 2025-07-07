@@ -9,12 +9,18 @@ use App\Model\Entity\Tag;
 final class Filter
 {
     /**
+     * @var Tag[]
+     */
+    private array $tags;
+
+    /**
      * @param Tag[] $tags
      */
     public function __construct(
         private ?string $search = null,
-        private array $tags = []
+        array $tags = []
     ) {
+        $this->tags = $tags;
     }
 
     public function getSearch(): ?string
@@ -28,11 +34,17 @@ final class Filter
         return $this;
     }
 
+    /**
+     * @return Tag[]
+     */
     public function getTags(): array
     {
         return $this->tags;
     }
 
+    /**
+     * @param Tag[] $tags
+     */
     public function setTags(array $tags): Filter
     {
         $this->tags = $tags;

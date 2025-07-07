@@ -34,7 +34,7 @@ class VideoGame
     #[Id]
     #[GeneratedValue]
     #[Column]
-    private ?int $id = null;
+    private int $id;
 
     #[NotBlank]
     #[Length(max: 100)]
@@ -77,16 +77,12 @@ class VideoGame
     #[Embedded(class: NumberOfRatingPerValue::class, columnPrefix: '')]
     private NumberOfRatingPerValue $numberOfRatingsPerValue;
 
-    /**
-     * @var Collection<Tag>
-     */
+    /** @var Collection<int, Tag> */
     #[ManyToMany(targetEntity: Tag::class)]
     #[JoinTable(name: 'video_game_tags')]
     private Collection $tags;
 
-    /**
-     * @var Collection<Review>
-     */
+    /** @var Collection<int, Review> */
     #[OneToMany(targetEntity: Review::class, mappedBy: 'videoGame')]
     private Collection $reviews;
 
@@ -98,7 +94,7 @@ class VideoGame
         $this->updatedAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -108,7 +104,7 @@ class VideoGame
         return $this->title;
     }
 
-    public function setTitle(string $title): VideoGame
+    public function setTitle(string $title): self
     {
         $this->title = $title;
         return $this;
@@ -123,7 +119,7 @@ class VideoGame
     {
         $this->imageFile = $imageFile;
 
-        if (null !== $imageFile) {
+        if ($imageFile !== null) {
             $this->updatedAt = new DateTimeImmutable();
         }
     }
@@ -133,7 +129,7 @@ class VideoGame
         return $this->imageFile;
     }
 
-    public function setImageName(?string $imageName): VideoGame
+    public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
         return $this;
@@ -144,7 +140,7 @@ class VideoGame
         return $this->imageName;
     }
 
-    public function setImageSize(?int $imageSize): VideoGame
+    public function setImageSize(?int $imageSize): self
     {
         $this->imageSize = $imageSize;
         return $this;
@@ -160,7 +156,7 @@ class VideoGame
         return $this->description;
     }
 
-    public function setDescription(string $description): VideoGame
+    public function setDescription(string $description): self
     {
         $this->description = $description;
         return $this;
@@ -171,7 +167,7 @@ class VideoGame
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(DateTimeInterface $releaseDate): VideoGame
+    public function setReleaseDate(DateTimeInterface $releaseDate): self
     {
         $this->releaseDate = $releaseDate;
         return $this;
@@ -182,7 +178,7 @@ class VideoGame
         return $this->test;
     }
 
-    public function setTest(?string $test): VideoGame
+    public function setTest(?string $test): self
     {
         $this->test = $test;
         return $this;
@@ -193,7 +189,7 @@ class VideoGame
         return $this->rating;
     }
 
-    public function setRating(?int $rating): VideoGame
+    public function setRating(?int $rating): self
     {
         $this->rating = $rating;
         return $this;
@@ -204,7 +200,7 @@ class VideoGame
         return $this->averageRating;
     }
 
-    public function setAverageRating(?int $averageRating): VideoGame
+    public function setAverageRating(?int $averageRating): self
     {
         $this->averageRating = $averageRating;
         return $this;
@@ -215,17 +211,13 @@ class VideoGame
         return $this->numberOfRatingsPerValue;
     }
 
-    /**
-     * @return Collection<Tag>
-     */
+    /** @return Collection<int, Tag> */
     public function getTags(): Collection
     {
         return $this->tags;
     }
 
-    /**
-     * @return Collection<Review>
-     */
+    /** @return Collection<int, Review> */
     public function getReviews(): Collection
     {
         return $this->reviews;
@@ -233,6 +225,8 @@ class VideoGame
 
     public function hasAlreadyReview(User $user): bool
     {
-        return $this->reviews->exists(static fn (int $key, Review $review): bool => $review->getUser() === $user);
+        return $this->reviews->exists(
+            static fn (int $key, Review $review): bool => $review->getUser() === $user
+        );
     }
 }

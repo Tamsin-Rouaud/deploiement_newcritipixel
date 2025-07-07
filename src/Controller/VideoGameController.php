@@ -33,21 +33,27 @@ final class VideoGameController extends AbstractController
     }
 
     #[Route('{slug}', name: 'show', methods: [Request::METHOD_GET, Request::METHOD_POST])]
-    public function show(VideoGame $videoGame, EntityManagerInterface $entityManager, Request $request): Response
-    {
-        $review = new Review();
+public function show(VideoGame $videoGame, EntityManagerInterface $entityManager, Request $request): Response
+{
+    $review = new Review();
 
-        $form = $this->createForm(ReviewType::class, $review)->handleRequest($request);
+    $form = $this->createForm(ReviewType::class, $review)->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->denyAccessUnlessGranted('review', $videoGame);
-            $review->setVideoGame($videoGame);
-            $review->setUser($this->getUser());
-            $entityManager->persist($review);
-            $entityManager->flush();
-            return $this->redirectToRoute('video_games_show', ['slug' => $videoGame->getSlug()]);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $this->denyAccessUnlessGranted('review', $videoGame);
+        $review->setVideoGame($videoGame);
+
+        $user = $this->getUser();
+        if ($user instanceof \App\Model\Entity\User) {
+            $review->setUser($user);
         }
 
-        return $this->render('views/video_games/show.html.twig', ['video_game' => $videoGame, 'form' => $form]);
+        $entityManager->persist($review);
+        $entityManager->flush();
+        return $this->redirectToRoute('video_games_show', ['slug' => $videoGame->getSlug()]);
     }
+
+    return $this->render('views/video_games/show.html.twig', ['video_game' => $videoGame, 'form' => $form]);
+}
+
 }

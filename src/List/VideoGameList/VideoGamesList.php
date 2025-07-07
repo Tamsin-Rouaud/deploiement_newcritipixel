@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
 /**
- * @implements IteratorAggregate<VideoGame>
+ * @implements IteratorAggregate<int, VideoGame>
  */
 final class VideoGamesList implements Countable, IteratorAggregate
 {
@@ -33,13 +33,16 @@ final class VideoGamesList implements Countable, IteratorAggregate
 
     private string $route;
 
-    private array $routeParameters;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $routeParameters = [];
 
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
         private FormFactoryInterface $formFactory,
         private VideoGameRepository $videoGameRepository,
-        private Pagination  $pagination,
+        private Pagination $pagination,
     ) {
     }
 
@@ -48,7 +51,7 @@ final class VideoGamesList implements Countable, IteratorAggregate
         return $this->form;
     }
 
-      public function handleRequest(Request $request): self
+    public function handleRequest(Request $request): self
     {
         $this->filter = new Filter();
 
@@ -142,6 +145,9 @@ final class VideoGamesList implements Countable, IteratorAggregate
         return $this->pagination;
     }
 
+    /**
+     * @return Traversable<int, VideoGame>
+     */
     public function getIterator(): Traversable
     {
         return $this->data;

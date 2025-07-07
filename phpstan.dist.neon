@@ -1,0 +1,14 @@
+parameters:
+    level: 6
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - var
+        - vendor
+        - bin
+        - public
+        - config
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+

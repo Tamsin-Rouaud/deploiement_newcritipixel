@@ -20,6 +20,8 @@ final class RatingDistributionCalculatorTest extends TestCase
     }
 
     /**
+     * @param array<int> $ratings
+     * @param array<int, int> $expectedCounts
      * @dataProvider provideRatingDistributions
      */
     public function testRatingDistribution(array $ratings, array $expectedCounts): void
@@ -44,7 +46,10 @@ final class RatingDistributionCalculatorTest extends TestCase
         self::assertSame($expectedCounts[5], $dist->getNumberOfFive(), '5-star count mismatch');
     }
 
-    public static function provideRatingDistributions(): array
+    /**
+     * @return iterable<string, array{0: array<int>, 1: array<int, int>}>
+     */
+    public static function provideRatingDistributions(): iterable
     {
         return [
             'no ratings' => [
