@@ -7,7 +7,6 @@ namespace App\Form;
 use App\Model\Entity\Review;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,9 +22,9 @@ final class ReviewType extends AbstractType
     {
         $builder
             ->add('rating', ChoiceType::class, [
-                'label' => 'Note',
+                'label'    => 'Note',
                 'required' => true,
-                'choices' => [
+                'choices'  => [
                     '1' => 1,
                     '2' => 2,
                     '3' => 3,
@@ -35,11 +34,11 @@ final class ReviewType extends AbstractType
                 'placeholder' => 'Choisir une note',
             ])
             ->add('comment', TextareaType::class, [
-                'label' => 'Commentaire',
+                'label'    => 'Commentaire',
                 'required' => false,
-                'attr' => [
+                'attr'     => [
                     'placeholder' => 'Commentaire',
-                ]
+                ],
             ]);
     }
 }

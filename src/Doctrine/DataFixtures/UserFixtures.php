@@ -13,11 +13,11 @@ final class UserFixtures extends Fixture
         /** @var User[] $users */
         $users = [];
 
-        for ($i = 0; $i < 10; $i++) {
-            $user = (new User)
-                ->setEmail(sprintf('user+%d@email.com', $i))
+        for ($i = 0; $i < 10; ++$i) {
+            $user = (new User())
+                ->setEmail(\sprintf('user+%d@email.com', $i))
                 ->setPlainPassword('password')
-                ->setUsername(sprintf('user+%d', $i));
+                ->setUsername(\sprintf('user+%d', $i));
 
             $users[] = $user;
             $manager->persist($user);

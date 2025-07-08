@@ -14,8 +14,8 @@ final class LoginTest extends FunctionalTestCase
         $this->get('/auth/login');
 
         $this->client->submitForm('Se connecter', [
-            'email' => 'user+1@email.com',
-            'password' => 'password'
+            'email'    => 'user+1@email.com',
+            'password' => 'password',
         ]);
 
         $authorizationChecker = $this->service(AuthorizationCheckerInterface::class);
@@ -32,8 +32,8 @@ final class LoginTest extends FunctionalTestCase
         $this->get('/auth/login');
 
         $this->client->submitForm('Se connecter', [
-            'email' => 'user+1@email.com',
-            'password' => 'fail'
+            'email'    => 'user+1@email.com',
+            'password' => 'fail',
         ]);
 
         $authorizationChecker = $this->service(AuthorizationCheckerInterface::class);
@@ -42,12 +42,11 @@ final class LoginTest extends FunctionalTestCase
     }
 
     public function testLoginUsingHelperMethod(): void
-{
-    $this->login('user+1@email.com');
+    {
+        $this->login('user+1@email.com');
 
-    $authChecker = $this->service(\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface::class);
+        $authChecker = $this->service(AuthorizationCheckerInterface::class);
 
-    self::assertTrue($authChecker->isGranted('IS_AUTHENTICATED'));
-}
-
+        self::assertTrue($authChecker->isGranted('IS_AUTHENTICATED'));
+    }
 }

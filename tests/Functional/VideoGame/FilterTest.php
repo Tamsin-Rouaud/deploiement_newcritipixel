@@ -29,6 +29,7 @@ final class FilterTest extends FunctionalTestCase
 
     /**
      * @param array<string> $tagIds
+     *
      * @dataProvider provideTagFilters
      */
     public function testShouldFilterVideoGamesByTags(array $tagIds, int $expectedMinCount): void
@@ -38,13 +39,13 @@ final class FilterTest extends FunctionalTestCase
 
         $count = $crawler->filter('article.game-card')->count();
 
-        if ($expectedMinCount === 0) {
+        if (0 === $expectedMinCount) {
             self::assertSame(0, $count);
         } else {
             self::assertGreaterThanOrEqual(
                 $expectedMinCount,
                 $count,
-                sprintf(
+                \sprintf(
                     'On attend au moins %d jeux pour les tags %s, mais %d trouvés.',
                     $expectedMinCount,
                     implode(',', $tagIds),

@@ -5,7 +5,12 @@
         <div class="row justify-content-center">
             {{ form_start(form) }}
                 <h1 class="h3 mb-3 fw-normal">Bienvenue !</h1>
-                {{ form_errors(form) }}
+
+                {# Bloc d’erreurs globales avec une classe identifiable pour les tests #}
+                <div class="form-error-message">
+                    {{ form_errors(form) }}
+                </div>
+
                 <fieldset class="mb-3">
                     {{ form_row(form.username) }}
                     {{ form_row(form.email) }}

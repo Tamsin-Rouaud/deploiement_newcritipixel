@@ -6,19 +6,20 @@ namespace App\Tests\Functional\VideoGame;
 
 use App\Model\Entity\Review;
 use App\Model\Entity\User;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Model\Entity\VideoGame;
 use App\Tests\Functional\FunctionalTestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class AddReviewTest extends FunctionalTestCase
 {
     /**
      * @dataProvider provideInvalidReviewData
+     *
      * @param array<string, int|string> $formData
      */
     public function testInvalidReviewSubmissions(array $formData): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager  = $this->getEntityManager();
         $passwordHasher = $this->service(UserPasswordHasherInterface::class);
 
         $user = new User();
@@ -46,29 +47,31 @@ final class AddReviewTest extends FunctionalTestCase
 
         $review = $entityManager->getRepository(Review::class)->findOneBy([
             'videoGame' => $videoGame,
-            'user' => $user,
+            'user'      => $user,
         ]);
         self::assertNull($review);
     }
 
     /**
-     * @return iterable<string, array<string, int|string>>
+     * @return iterable<string, array{0: array<string, string|int>}>
      */
     public static function provideInvalidReviewData(): iterable
     {
         yield 'missing rating' => [
-            'review[comment]' => 'Commentaire sans note.',
+            ['review[comment]' => 'Commentaire sans note.'],
         ];
 
         yield 'too long comment' => [
-            'review[rating]' => 3,
-            'review[comment]' => str_repeat('A', 3001),
+            [
+                'review[rating]'  => 3,
+                'review[comment]' => str_repeat('A', 3001),
+            ],
         ];
     }
 
     public function testThatReviewCanBeSubmitted(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager  = $this->getEntityManager();
         $passwordHasher = $this->service(UserPasswordHasherInterface::class);
 
         $user = new User();
@@ -90,7 +93,7 @@ final class AddReviewTest extends FunctionalTestCase
         self::assertSelectorExists('form[name="review"]');
 
         $form = $crawler->filter('form[name="review"]')->form([
-            'review[rating]' => 4,
+            'review[rating]'  => 4,
             'review[comment]' => 'Très bon jeu !',
         ]);
 
@@ -99,7 +102,7 @@ final class AddReviewTest extends FunctionalTestCase
 
         $review = $entityManager->getRepository(Review::class)->findOneBy([
             'videoGame' => $videoGame,
-            'user' => $user,
+            'user'      => $user,
         ]);
 
         self::assertNotNull($review);
@@ -125,7 +128,7 @@ final class AddReviewTest extends FunctionalTestCase
 
         $this->client->request('POST', '/' . $videoGame->getSlug(), [
             'review' => [
-                'rating' => 3,
+                'rating'  => 3,
                 'comment' => 'Tentative anonyme',
             ],
         ]);
@@ -136,7 +139,7 @@ final class AddReviewTest extends FunctionalTestCase
             ->getRepository(Review::class)
             ->findOneBy([
                 'videoGame' => $videoGame,
-                'comment' => 'Tentative anonyme',
+                'comment'   => 'Tentative anonyme',
             ]);
 
         self::assertNull($review);
@@ -144,7 +147,7 @@ final class AddReviewTest extends FunctionalTestCase
 
     public function testThatUserCannotSeeReviewFormAfterSubmitting(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager  = $this->getEntityManager();
         $passwordHasher = $this->service(UserPasswordHasherInterface::class);
 
         $user = new User();
@@ -163,7 +166,7 @@ final class AddReviewTest extends FunctionalTestCase
         $crawler = $this->get('/' . $videoGame->getSlug());
 
         $form = $crawler->filter('form[name="review"]')->form([
-            'review[rating]' => 5,
+            'review[rating]'  => 5,
             'review[comment]' => 'Unique avis.',
         ]);
 

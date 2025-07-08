@@ -18,20 +18,20 @@ final class FilterType extends AbstractType
     {
         $builder
             ->add('search', TextType::class, [
-                'label' => 'Rechercher',
+                'label'    => 'Rechercher',
                 'required' => false,
-                'attr' =>  [
+                'attr'     => [
                     'placeholder' => 'Rechercher...',
                 ],
             ])
             ->add('tags', EntityType::class, [
-                'label' => 'Tags',
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'class' => Tag::class,
+                'label'        => 'Tags',
+                'required'     => false,
+                'multiple'     => true,
+                'expanded'     => true,
+                'class'        => Tag::class,
                 'choice_label' => 'name',
-                'attr' =>  [
+                'attr'         => [
                     'class' => 'd-flex gap-2 flex-wrap',
                 ],
             ]);

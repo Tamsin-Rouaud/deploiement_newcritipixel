@@ -31,7 +31,7 @@ final class AverageRatingCalculatorTest extends TestCase
     public function testAverageWithOneReview(): void
     {
         $videoGame = new VideoGame();
-        $review = (new Review())
+        $review    = (new Review())
             ->setRating(4)
             ->setUser(new User())
             ->setVideoGame($videoGame);

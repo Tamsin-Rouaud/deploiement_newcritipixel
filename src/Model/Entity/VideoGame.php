@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -59,10 +57,10 @@ class VideoGame
     private string $description;
 
     #[Column(type: Types::DATE_IMMUTABLE)]
-    private DateTimeInterface $releaseDate;
+    private \DateTimeInterface $releaseDate;
 
     #[Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private DateTimeImmutable $updatedAt;
+    private \DateTimeImmutable $updatedAt;
 
     #[Column(type: Types::TEXT, nullable: true)]
     private ?string $test = null;
@@ -89,9 +87,9 @@ class VideoGame
     public function __construct()
     {
         $this->numberOfRatingsPerValue = new NumberOfRatingPerValue();
-        $this->tags = new ArrayCollection();
-        $this->reviews = new ArrayCollection();
-        $this->updatedAt = new DateTimeImmutable();
+        $this->tags                    = new ArrayCollection();
+        $this->reviews                 = new ArrayCollection();
+        $this->updatedAt               = new \DateTimeImmutable();
     }
 
     public function getId(): int
@@ -107,6 +105,7 @@ class VideoGame
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -119,8 +118,8 @@ class VideoGame
     {
         $this->imageFile = $imageFile;
 
-        if ($imageFile !== null) {
-            $this->updatedAt = new DateTimeImmutable();
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
@@ -132,6 +131,7 @@ class VideoGame
     public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
+
         return $this;
     }
 
@@ -143,6 +143,7 @@ class VideoGame
     public function setImageSize(?int $imageSize): self
     {
         $this->imageSize = $imageSize;
+
         return $this;
     }
 
@@ -159,17 +160,19 @@ class VideoGame
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
-    public function getReleaseDate(): DateTimeInterface
+    public function getReleaseDate(): \DateTimeInterface
     {
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(DateTimeInterface $releaseDate): self
+    public function setReleaseDate(\DateTimeInterface $releaseDate): self
     {
         $this->releaseDate = $releaseDate;
+
         return $this;
     }
 
@@ -181,6 +184,7 @@ class VideoGame
     public function setTest(?string $test): self
     {
         $this->test = $test;
+
         return $this;
     }
 
@@ -192,6 +196,7 @@ class VideoGame
     public function setRating(?int $rating): self
     {
         $this->rating = $rating;
+
         return $this;
     }
 
@@ -203,6 +208,7 @@ class VideoGame
     public function setAverageRating(?int $averageRating): self
     {
         $this->averageRating = $averageRating;
+
         return $this;
     }
 

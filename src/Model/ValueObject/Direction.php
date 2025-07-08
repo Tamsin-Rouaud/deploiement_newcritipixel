@@ -10,13 +10,13 @@ enum Direction: string
 {
     use EnumTrait;
 
-    case Ascending = 'Croissant';
+    case Ascending  = 'Croissant';
     case Descending = 'Décroissant';
 
     public function getSql(): string
     {
-        return match($this) {
-            self::Ascending => 'asc',
+        return match ($this) {
+            self::Ascending  => 'asc',
             self::Descending => 'desc',
         };
     }

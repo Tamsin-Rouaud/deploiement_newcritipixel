@@ -36,7 +36,7 @@ final class VideoGameRepository extends ServiceEntityRepository
                 $pagination->getDirection()->getSql()
             );
 
-        if ($filter->getSearch() !== null) {
+        if (null !== $filter->getSearch()) {
             $queryBuilder
                 ->andWhere(
                     $queryBuilder->expr()->orX(
@@ -61,7 +61,7 @@ final class VideoGameRepository extends ServiceEntityRepository
             $queryBuilder
                 ->andWhere($queryBuilder->expr()->in('vg.id', $subQuery->getDQL()))
                 ->setParameter('tags', $filter->getTags())
-                ->setParameter('tagCount', count($filter->getTags()));
+                ->setParameter('tagCount', \count($filter->getTags()));
         }
 
         return new Paginator($queryBuilder, fetchJoinCollection: true);

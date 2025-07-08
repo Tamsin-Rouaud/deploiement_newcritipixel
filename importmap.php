@@ -13,7 +13,7 @@
  */
 return [
     'app' => [
-        'path' => './assets/app.js',
+        'path'       => './assets/app.js',
         'entrypoint' => true,
     ],
     'bootstrap' => [
@@ -21,5 +21,5 @@ return [
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
-    ]
+    ],
 ];

@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Range;
 
 #[Entity]
 class Review
@@ -20,7 +20,7 @@ class Review
     #[Id]
     #[GeneratedValue]
     #[Column]
-    private int $id ;
+    private int $id;
 
     #[ManyToOne(targetEntity: VideoGame::class, inversedBy: 'reviews')]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -49,9 +49,10 @@ class Review
         return $this->videoGame;
     }
 
-    public function setVideoGame(VideoGame $videoGame): Review
+    public function setVideoGame(VideoGame $videoGame): self
     {
         $this->videoGame = $videoGame;
+
         return $this;
     }
 
@@ -60,9 +61,10 @@ class Review
         return $this->user;
     }
 
-    public function setUser(User $user): Review
+    public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -71,9 +73,10 @@ class Review
         return $this->rating;
     }
 
-    public function setRating(int $rating): Review
+    public function setRating(int $rating): self
     {
         $this->rating = $rating;
+
         return $this;
     }
 
@@ -82,9 +85,10 @@ class Review
         return $this->comment;
     }
 
-    public function setComment(?string $comment): Review
+    public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
         return $this;
     }
 }
