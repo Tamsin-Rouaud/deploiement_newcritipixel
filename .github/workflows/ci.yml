@@ -50,8 +50,17 @@ jobs:
       - name: Load fixtures
         run: php bin/console doctrine:fixtures:load --no-interaction --env=test
 
+      # (Optionnel) Compile SASS si ton projet le nécessite
+      - name: Compile SASS
+        run: php bin/console sass:build
+        continue-on-error: true
+
       - name: Run tests
         run: php bin/phpunit
+
+      # ➕ Diagnostic en cas d'erreur de test
+      - name: Check Symfony logs (dev.log)
+        run: cat var/log/dev.log || echo "No dev.log found"
 
       - name: Run PHPStan (analyse statique)
         run: vendor/bin/phpstan analyse --memory-limit=1G
