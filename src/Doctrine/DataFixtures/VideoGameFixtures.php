@@ -101,6 +101,48 @@ final class VideoGameFixtures extends Fixture implements DependentFixtureInterfa
             $manager->persist($videoGame);
         }
 
+        // Crée un jeu spécifique avec les tags Stratégie + Indépendant
+$strategieTag = null;
+$indepTag = null;
+
+foreach ($allTags as $tag) {
+    if ($tag->getName() === 'Stratégie') {
+        $strategieTag = $tag;
+    }
+    if ($tag->getName() === 'Indépendant') {
+        $indepTag = $tag;
+    }
+}
+
+if ($strategieTag && $indepTag && count($users) > 0) {
+    $specialGame = new VideoGame();
+    $specialGame->setTitle('Jeu filtré spécial')
+        ->setDescription('Jeu ayant les tags Stratégie et Indépendant.')
+        ->setReleaseDate(new \DateTimeImmutable())
+        ->setTest('Contenu test spécial')
+        ->setRating(4)
+        ->setImageName('special_game.png')
+        ->setImageSize(2048000);
+
+    $specialGame->getTags()->add($strategieTag);
+    $specialGame->getTags()->add($indepTag);
+
+    $review = (new Review())
+        ->setVideoGame($specialGame)
+        ->setUser($users[0])
+        ->setRating(4)
+        ->setComment('Super jeu pour tester les filtres.');
+
+    $specialGame->getReviews()->add($review);
+    $manager->persist($review);
+
+    $this->calculateAverageRating->calculateAverage($specialGame);
+    $this->countRatingsPerValue->countRatingsPerValue($specialGame);
+
+    $manager->persist($specialGame);
+}
+
+
         $manager->flush();
     }
 
