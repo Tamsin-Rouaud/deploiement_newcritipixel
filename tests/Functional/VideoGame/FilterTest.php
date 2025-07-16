@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\VideoGame;
 
 use App\Tests\Functional\FunctionalTestCase;
+use App\Model\Entity\Tag;
 
 final class FilterTest extends FunctionalTestCase
 {
@@ -28,9 +29,8 @@ final class FilterTest extends FunctionalTestCase
     }
 
     /**
-     * @param array<string> $tagIds
-     *
      * @dataProvider provideTagFilters
+     * @param array<string> $tagIds
      */
     public function testShouldFilterVideoGamesByTags(array $tagIds, int $expectedMinCount): void
     {
@@ -56,33 +56,45 @@ final class FilterTest extends FunctionalTestCase
     }
 
     /**
-     * @return iterable<string, array{0: array<string>, 1: int}>
-     */
-    public static function provideTagFilters(): iterable
-    {
-        yield 'aucun tag' => [
-            [],
-            10,
-        ];
+ * @return iterable<string, array{0: array<string>, 1: int}>
+ */
+public static function provideTagFilters(): iterable
+{
+    yield 'aucun tag' => [
+        [], 10,
+    ];
 
-        yield 'tag RPG (id 1)' => [
-            ['1'],
-            1,
-        ];
+    yield 'tag RPG (id 1)' => [
+        ['1'], 1,
+    ];
 
-        yield 'tags RPG + Action (1,2)' => [
-            ['1', '2'],
-            1,
-        ];
+    yield 'tags RPG + Action (1,2)' => [
+        ['1', '2'], 1,
+    ];
 
-        yield 'tags Stratégie + Indépendant (7,5)' => [
-            ['7', '5'],
-            1,
-        ];
+    yield 'tag inexistant (id 999)' => [
+        ['999'], 10,
+    ];
+}
+public function testShouldFilterByStrategyAndIndieTags(): void
+{
+    $em = self::getContainer()->get('doctrine')->getManager();
 
-        yield 'tag inexistant (id 999)' => [
-            ['999'],
-            10,
-        ];
-    }
+    $strategie = $em->getRepository(\App\Model\Entity\Tag::class)->findOneBy(['name' => 'Stratégie']);
+    $independant = $em->getRepository(\App\Model\Entity\Tag::class)->findOneBy(['name' => 'Indépendant']);
+
+    self::assertNotNull($strategie);
+    self::assertNotNull($independant);
+
+    $crawler = $this->get('/', [
+        'filter' => [
+            'tags' => [$strategie->getId(), $independant->getId()],
+        ],
+    ]);
+
+    self::assertResponseIsSuccessful();
+    self::assertGreaterThanOrEqual(1, $crawler->filter('article.game-card')->count());
+}
+
+
 }
