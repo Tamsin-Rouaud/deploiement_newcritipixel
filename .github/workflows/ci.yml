@@ -2,7 +2,7 @@ name: CI Symfony
 
 on:
   push:
-    branches: [ ci-test ]
+    branches: [ main, ci-test ]
   pull_request:
     branches: [ main ]
 
